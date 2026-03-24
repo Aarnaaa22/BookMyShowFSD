@@ -2,7 +2,7 @@
 // ROOT COMPONENT: App.js
 // CONCEPTS DEMONSTRATED:
 //   1. State Lifting      - totalSaved state managed here, passed to children
-//   2. React Router       - BrowserRouter, Routes, Route setup
+//   2. React Router       - HashRouter, Routes, Route setup (GitHub Pages safe)
 //   3. Context Providers  - ThemeProvider and UserProvider wrap entire app
 //   4. useState           - local state for totalSaved (amount spent on bookings)
 //   5. useEffect          - logs theme changes to console
@@ -10,9 +10,9 @@
 // ============================================================
 
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./redux/store";
+import { store } from "./redux/store";
 import { ThemeProvider, UserProvider, useTheme } from "./context/AppContext";
 
 // Components
@@ -32,63 +32,56 @@ const AppContent = () => {
   const { theme } = useTheme();
 
   // ---- STATE LIFTING ----
-  // totalSaved is managed here in App.js (the common ancestor)
-  // and passed DOWN to child components via props.
-  // Children (Cart/BookingCart) call the callback to update this state.
   const [totalSaved, setTotalSaved] = useState(0);
 
-  // Callback passed to Cart — called when user confirms booking
-  // This is "lifting state up": child notifies parent of an event
+  // Callback passed to Cart — child updates parent state
   const handleBookingConfirmed = (amount) => {
     setTotalSaved((prev) => prev + amount);
   };
 
-  // useEffect: log whenever theme changes
+  // useEffect: runs when theme changes
   useEffect(() => {
-    console.log(`useEffect in App.js: Theme changed to "${theme}"`);
-    document.body.className = theme; // Apply theme to body
-  }, [theme]); // Dependency array: re-runs whenever 'theme' changes
+    console.log(`Theme changed to: ${theme}`);
+    document.body.className = theme; // Apply theme globally
+  }, [theme]);
 
   return (
-    // Apply theme class to root container
     <div className={`app-container ${theme}`}>
-      {/* Header is shown on ALL pages */}
+      {/* Header visible on all pages */}
       <Header />
 
-      {/* ---- REACT ROUTER: Define all page routes ---- */}
+      {/* ---- ROUTING ---- */}
       <Routes>
-        {/* Home page — receives totalSaved via prop (State Lifting) */}
+        {/* Home Page */}
         <Route path="/" element={<Home totalSaved={totalSaved} />} />
 
-        {/* Cart page — receives callback to lift state up */}
+        {/* Cart Page */}
         <Route
           path="/cart"
           element={<Cart onBookingConfirmed={handleBookingConfirmed} />}
         />
 
-        {/* Profile page */}
+        {/* Profile Page */}
         <Route path="/profile" element={<Profile />} />
 
-        {/* Catch-all: redirect unknown routes to Home */}
+        {/* Fallback Route */}
         <Route path="*" element={<Home totalSaved={totalSaved} />} />
       </Routes>
     </div>
   );
 };
 
-// ---- Main App component — sets up all Providers ----
+// ---- Main App Component ----
 function App() {
   return (
-    // Redux Provider: makes Redux store available to all components
+    // Redux Global State
     <Provider store={store}>
-      {/* ThemeProvider: makes theme context available everywhere */}
+      {/* Context Providers */}
       <ThemeProvider>
-        {/* UserProvider: makes user login context available everywhere */}
         <UserProvider>
-          {/* BrowserRouter: enables React Router routing */}
-          <Router>
+          <HashRouter>
             <AppContent />
-          </Router>
+          </HashRouter>
         </UserProvider>
       </ThemeProvider>
     </Provider>

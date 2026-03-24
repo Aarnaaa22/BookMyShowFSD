@@ -2,6 +2,7 @@
   "name": "entertainment-booking-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://aarnaaa22.github.io/BookMyShowFSD/",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
     "react": "^18.2.0",

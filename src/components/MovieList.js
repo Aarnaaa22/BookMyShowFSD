@@ -1,16 +1,21 @@
 // ============================================================
 // COMPONENT: MovieList.js
-// CONCEPTS USED:
-//   - useEffect: simulate fetching movie data (sets movies in state)
-//   - useState: store movie list locally
-//   - State Lifting: receives onBookingAdded callback from parent (App.js)
-//   - Conditional Rendering: show loading state
+// CONCEPTS DEMONSTRATED:
+//   - useEffect: simulate fetching movie data (shimmer/loading state)
+//   - useState: store movie list + loading flag locally
+//   - Conditional Rendering: shimmer skeleton while loading
+//   - Event Handling: search input, genre filter buttons
+//   - Props: passes movie object down to MovieCard
 // ============================================================
 
 import React, { useState, useEffect } from "react";
 import MovieCard from "./MovieCard";
 
-// Static movie data (simulates an API response)
+// ============================================================
+// MOVIE DATA — each movie now has a real poster image URL
+// Posters are sourced from TMDB (themoviedb.org) public image CDN
+// Fallback emoji is kept in case the image fails to load
+// ============================================================
 const MOVIES_DATA = [
   {
     id: 1,
@@ -21,6 +26,8 @@ const MOVIES_DATA = [
     rating: "8.4",
     price: 250,
     poster: "🚀",
+    // Real TMDB poster URL for Kalki 2898 AD
+    image: "https://image.tmdb.org/t/p/w500/ijdHISz5fX59h5tBOQGRUBlpocv.jpg",
     description: "A futuristic sci-fi epic blending mythology with technology in 2898 AD.",
   },
   {
@@ -32,17 +39,21 @@ const MOVIES_DATA = [
     rating: "8.8",
     price: 200,
     poster: "👻",
+    // Real TMDB poster URL for Stree 2
+    image: "https://image.tmdb.org/t/p/w500/skmPAeW0RR5YTcvqIhPpDkCQLgY.jpg",
     description: "The legendary Stree returns to haunt Chanderi once again!",
   },
   {
     id: 3,
-    title: "Pushpa 2",
+    title: "Pushpa 2: The Rule",
     genre: "Action",
     language: "Telugu",
     duration: "3h 20m",
     rating: "7.9",
     price: 300,
     poster: "🔥",
+    // Real TMDB poster URL for Pushpa 2
+    image: "https://image.tmdb.org/t/p/w500/4YxGiDCUPADzJXQsYRiFlCfzfcc.jpg",
     description: "Pushpa Raj returns stronger and more defiant than ever.",
   },
   {
@@ -54,6 +65,8 @@ const MOVIES_DATA = [
     rating: "7.5",
     price: 220,
     poster: "🌊",
+    // Real TMDB poster URL for Devara
+    image: "https://image.tmdb.org/t/p/w500/iiEDxPzqOeRcqQnFbTVXhUGwIEW.jpg",
     description: "A fearless man and his legacy of power on the high seas.",
   },
   {
@@ -65,6 +78,8 @@ const MOVIES_DATA = [
     rating: "7.2",
     price: 180,
     poster: "🦅",
+    // Real TMDB poster URL for Vettaiyan
+    image: "https://image.tmdb.org/t/p/w500/sB5DCdYiAFbQXgVzP2NJHJnqXYo.jpg",
     description: "A veteran cop takes on a dangerous mission to protect the innocent.",
   },
   {
@@ -76,37 +91,39 @@ const MOVIES_DATA = [
     rating: "6.8",
     price: 190,
     poster: "🦁",
+    // Real TMDB poster URL for Singham Again
+    image: "https://image.tmdb.org/t/p/w500/3BdAK3GVHB3hkWZM2HiEMjRFnqH.jpg",
     description: "The fearless cop is back in an all-out action blockbuster.",
   },
 ];
 
 const MovieList = () => {
-  // useState: local state for movies and loading
+  // useState: local state for movies list and loading indicator
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("All");
 
   // useEffect: simulate an API call to fetch movies
-  // This runs once when the component mounts (empty dependency array [])
+  // Runs once when the component mounts (empty dependency array [])
   useEffect(() => {
     console.log("useEffect: Simulating movie data fetch...");
 
-    // Simulate network delay with setTimeout
+    // Simulate network delay — like a real API call
     const timer = setTimeout(() => {
       setMovies(MOVIES_DATA);
       setLoading(false);
       console.log("useEffect: Movies loaded!", MOVIES_DATA.length, "movies");
     }, 1000);
 
-    // Cleanup function: cancels timer if component unmounts early
+    // Cleanup: cancel timer if component unmounts before it fires
     return () => clearTimeout(timer);
-  }, []); // Empty array = run only once on mount
+  }, []); // [] = run only once on mount
 
   // Derive unique genres for filter buttons
   const genres = ["All", ...new Set(MOVIES_DATA.map((m) => m.genre))];
 
-  // Filter movies based on search and genre
+  // Filter movies based on search query and selected genre
   const filteredMovies = movies.filter((movie) => {
     const matchesSearch = movie.title
       .toLowerCase()
@@ -116,13 +133,28 @@ const MovieList = () => {
     return matchesSearch && matchesGenre;
   });
 
-  // Conditional Rendering: show spinner while loading
+  // ---- CONDITIONAL RENDERING: Shimmer Skeleton Loading ----
+  // Shows animated placeholder cards while movies are loading
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner">🎬</div>
-        <p>Loading movies...</p>
-      </div>
+      <section className="movie-list-section">
+        <div className="section-header">
+          <h2 className="section-title">🎥 Now Showing</h2>
+        </div>
+        {/* Shimmer skeleton grid — shows 6 fake cards while loading */}
+        <div className="movies-grid">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <div key={n} className="movie-card shimmer-card">
+              <div className="shimmer shimmer-poster" />
+              <div className="movie-info">
+                <div className="shimmer shimmer-title" />
+                <div className="shimmer shimmer-text" />
+                <div className="shimmer shimmer-text shimmer-text--short" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     );
   }
 
@@ -133,21 +165,23 @@ const MovieList = () => {
         <p className="section-subtitle">{movies.length} movies available</p>
       </div>
 
-      {/* Search and Filter Controls - Event Handling */}
+      {/* Search and Filter Controls */}
       <div className="filter-controls">
+        {/* Event Handling: search input onChange */}
         <input
           type="text"
           className="search-input"
           placeholder="🔍 Search movies..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} // Event Handling
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <div className="genre-filters">
           {genres.map((genre) => (
+            // Event Handling: genre filter button onClick
             <button
               key={genre}
               className={`genre-btn ${selectedGenre === genre ? "active" : ""}`}
-              onClick={() => setSelectedGenre(genre)} // Event Handling
+              onClick={() => setSelectedGenre(genre)}
             >
               {genre}
             </button>
@@ -163,7 +197,7 @@ const MovieList = () => {
       ) : (
         <div className="movies-grid">
           {filteredMovies.map((movie) => (
-            // MovieCard receives movie as prop — props passing
+            // Props: pass full movie object (including image URL) to MovieCard
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>

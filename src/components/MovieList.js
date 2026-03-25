@@ -27,7 +27,7 @@ const MOVIES_DATA = [
     price: 250,
     poster: "🚀",
     // Real TMDB poster URL for Kalki 2898 AD
-    image: "https://image.tmdb.org/t/p/w500/ijdHISz5fX59h5tBOQGRUBlpocv.jpg",
+    image: "https://images.indianexpress.com/2024/06/kalki-2898-ad-day-3-collection-1600.jpeg",
     description: "A futuristic sci-fi epic blending mythology with technology in 2898 AD.",
   },
   {
@@ -40,7 +40,7 @@ const MOVIES_DATA = [
     price: 200,
     poster: "👻",
     // Real TMDB poster URL for Stree 2
-    image: "https://image.tmdb.org/t/p/w500/skmPAeW0RR5YTcvqIhPpDkCQLgY.jpg",
+    image: "https://st1.latestly.com/wp-content/uploads/2023/04/1-1-13.jpg",
     description: "The legendary Stree returns to haunt Chanderi once again!",
   },
   {
@@ -53,7 +53,7 @@ const MOVIES_DATA = [
     price: 300,
     poster: "🔥",
     // Real TMDB poster URL for Pushpa 2
-    image: "https://image.tmdb.org/t/p/w500/4YxGiDCUPADzJXQsYRiFlCfzfcc.jpg",
+    image: "https://i.ytimg.com/vi/R-sXCEmoynw/maxresdefault.jpg",
     description: "Pushpa Raj returns stronger and more defiant than ever.",
   },
   {
@@ -66,7 +66,7 @@ const MOVIES_DATA = [
     price: 220,
     poster: "🌊",
     // Real TMDB poster URL for Devara
-    image: "https://image.tmdb.org/t/p/w500/iiEDxPzqOeRcqQnFbTVXhUGwIEW.jpg",
+    image: "https://nri.connectmyindia.com/movies/images/2024/devara-hd-images.jpg",
     description: "A fearless man and his legacy of power on the high seas.",
   },
   {
@@ -79,7 +79,7 @@ const MOVIES_DATA = [
     price: 180,
     poster: "🦅",
     // Real TMDB poster URL for Vettaiyan
-    image: "https://image.tmdb.org/t/p/w500/sB5DCdYiAFbQXgVzP2NJHJnqXYo.jpg",
+    image: "https://www.koimoi.com/wp-content/new-galleries/2024/10/check-out-our-trailer-review-for-the-rajinikanth-starrer-vettaiyan-01.jpg",
     description: "A veteran cop takes on a dangerous mission to protect the innocent.",
   },
   {
@@ -92,7 +92,7 @@ const MOVIES_DATA = [
     price: 190,
     poster: "🦁",
     // Real TMDB poster URL for Singham Again
-    image: "https://image.tmdb.org/t/p/w500/3BdAK3GVHB3hkWZM2HiEMjRFnqH.jpg",
+    image: "https://stat5.bollywoodhungama.in/wp-content/uploads/2025/03/World-Television-Premiere-of-Singham-620.jpg",
     description: "The fearless cop is back in an all-out action blockbuster.",
   },
 ];
